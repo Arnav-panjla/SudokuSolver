@@ -2,19 +2,16 @@
 # array = arr[row][column]
 
 sudoku = [
-    [7, 8, 0, 4, 0, 0, 1, 2, 0],
-    [6, 0, 0, 0, 7, 5, 0, 0, 9],
-    [0, 0, 0, 6, 0, 1, 0, 7, 8],
-    [0, 0, 7, 0, 4, 0, 2, 6, 0],
-    [0, 0, 1, 0, 5, 0, 9, 3, 0],
-    [9, 0, 4, 0, 6, 0, 0, 0, 5],
-    [0, 7, 0, 3, 0, 0, 0, 1, 2],
-    [1, 2, 0, 0, 0, 7, 4, 0, 0],
-    [0, 4, 9, 2, 0, 6, 0, 0, 7]
+    [0, 2, 0, 0, 5, 0, 8, 0, 0],
+    [4, 0, 0, 0, 1, 0, 2, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 4, 0],
+    [6, 0, 5, 0, 0, 7, 1, 0, 0],
+    [0, 3, 4, 0, 2, 6, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 7, 0, 0],
+    [3, 0, 0, 0, 7, 0, 0, 1, 5],
+    [1, 0, 0, 0, 4, 0, 0, 0, 3],
+    [0, 6, 0, 0, 0, 0, 0, 2, 0]
 ]
-
-EmpList = []
-
 
 def printSudoku(arr): # function to print array
     for i in range(len(arr)):
@@ -62,6 +59,12 @@ def solveSudoku(arr):
             return False            
 
 
+print("Initial sudoku matrix")
 printSudoku(sudoku)
-solveSudoku(sudoku)
-printSudoku(sudoku)
+isComp = solveSudoku(sudoku)
+if isComp:
+    print("\n")
+    print("Final sudoku matrix -->")
+    printSudoku(sudoku)
+else:
+    print("Sorry! your sudoku is not solvable :(")
