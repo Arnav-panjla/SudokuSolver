@@ -58,13 +58,17 @@ def solveSudoku(arr):
                     arr[I[0]][I[1]] = 0
             return False            
 
-
-print("Initial sudoku matrix")
-printSudoku(sudoku)
-isComp = solveSudoku(sudoku)
-if isComp:
-    print("\n")
-    print("Final sudoku matrix -->")
+def main():
+    print("Initial sudoku matrix")
     printSudoku(sudoku)
-else:
-    print("Sorry! your sudoku is not solvable :(")
+    isComp = solveSudoku(sudoku)
+    if isComp:
+        print("\n")
+        print("Final sudoku matrix -->")
+        printSudoku(sudoku)
+    else:
+        print("Sorry! your sudoku is not solvable :(")
+
+
+if __name__ == "__main__":
+    main()
