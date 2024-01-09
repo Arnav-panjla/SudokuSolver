@@ -43,7 +43,6 @@ def IsValid(arr, pos, val):
                 return False
     return True
 
-
 def solveSudoku(arr):
     EmpList = findEmpty(arr)
     if EmpList == []:
