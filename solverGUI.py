@@ -1,16 +1,24 @@
 from tkinter import *
+import copy
 
 
-###############################variable_defining###################################
+###############################_Constants_Defining_###################################
+GEOMETRY_ROOT = "750x600"
+GEOMETRY_OUTPUT = "700x600"
 BACKGROUND = "#393F42"
-ENTRYBOX_BG = "#E2FCFF"
+ENTRY_BG = "#E2FCFF"
+ENTRY_FG = "blue"
+LABEL_BG = "#E2FCFF"
+LABEL_FG_IN = "blue"
+LABEL_FG_OUT = "green"
 
 
 
 
-###################################################################################
 
-def printSudoku(arr): # function to print array
+########################################################_Sudoku_Solving_Algorithm_#############################################3
+
+def printSudoku(arr): # function to print array(or more precisely Sudoku)
     for i in range(len(arr)):
         if i%3 == 0 :
             print("--------------------")
@@ -28,7 +36,7 @@ def findEmpty(arr): # function to find empty element in array
                 EmpList.append((y,x))
     return EmpList
 
-def IsValid(arr, pos, val):
+def IsValid(arr, pos, val): # finction to check of the given value is valid
     if val in arr[pos[0]]:
         return False
     elif val in [arr[i][pos[1]] for i in range(9)]:
@@ -41,7 +49,7 @@ def IsValid(arr, pos, val):
     return True
 
 
-def solveSudoku(arr):
+def solveSudoku(arr): # main algorithm to solve sudoku
     EmpList = findEmpty(arr)
     if EmpList == []:
         return True
@@ -56,9 +64,9 @@ def solveSudoku(arr):
             return False            
 
 
-######################################################### GUI part #################################################################
+#########################################################_GUI_Part_#################################################################
 
-def initialArray(grid_entries):
+def formSudoku(grid_entries):
     sudoku = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -74,43 +82,69 @@ def initialArray(grid_entries):
     for row in range(9):
         for col in range(9):
             grid_val = grid_entries[row][col].get()
-            if  grid_val is not None and grid_val.isdigit():
+            if  grid_val.isdigit():
                 sudoku[row][col] = int(grid_val)
 
     return sudoku
 
-def createGrid(root):
+def createGrid():
     entries = []
+
     for i in range(9):
         row_entries = []
         for j in range(9):
-            entry = Entry(root, width=2, font=('Helvetica', 35), bg=ENTRYBOX_BG)
+            entry = Entry(root, width=2, font=('Helvetica', 35), bg=ENTRY_BG, fg=ENTRY_FG)
             entry.grid(row=i, column=j, padx=2, pady=2)
-
             row_entries.append(entry)
         entries.append(row_entries)
     return entries
+
+
+def displayResult(initialSudoku, finalSudoku): # function which displays output 
+    out_window = Tk()
+    out_window.geometry(GEOMETRY_OUTPUT)
+    out_window.title("Sudoku Result Display")
+    out_window.config(background=BACKGROUND)
+
+    for i in range(9):
+        for j in range(9):
+            if initialSudoku[i][j] == 0:
+                label = Label(out_window, text=str(finalSudoku[i][j]), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=LABEL_FG_OUT)
+                label.grid(row=i, column=j, padx=2, pady=2)
+            else:
+                label = Label(out_window, text=str(finalSudoku[i][j]), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=LABEL_FG_IN)
+                label.grid(row=i, column=j, padx=2, pady=2)
+
+
+def clear():
+    pass
+
+def solve(grid_entries):
+    initialSudoku = formSudoku(grid_entries)  
+    finalSudoku = copy.deepcopy(initialSudoku)
+    solveSudoku(finalSudoku)
+    printSudoku(finalSudoku)
+    #root.destroy()
+    displayResult(initialSudoku, finalSudoku)
+
 
 def main():
     global root
     root = Tk()
     root.title("Sudoku Solver")
-    root.geometry("550x630")
+    root.geometry(GEOMETRY_ROOT)
     root.config(background=BACKGROUND)
 
     # Create a 9x9 grid of Entry widgets
-    grid_entries = createGrid(root)
+    grid_entries = createGrid()
     
     # Add a Solve button (you can later add functionality to solve the puzzle)
-    solve_button = Button(root, text="Solve", command=lambda :click(grid_entries), font=("consol",20))
-    solve_button.grid(row=10, column=0, columnspan=15)
+    solveButton = Button(root, text="   Solve   ", command=lambda :solve(grid_entries), font=('Consol', 20))
+    solveButton.place(x=585,y=200)
+    clearButton = Button(root, text=" Clear ", command=clear, font=('Consol', 20))
+    clearButton.place(x=600, y=270)
 
     root.mainloop()
-
-def click(grid_entries):
-    Sudoku = initialArray(grid_entries)
-    solveSudoku(Sudoku)
-    printSudoku(Sudoku)
 
 
 if __name__ == "__main__":
