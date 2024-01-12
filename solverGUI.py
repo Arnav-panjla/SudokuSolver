@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import copy
 
 
@@ -30,10 +31,10 @@ def printSudoku(arr): # function to print array(or more precisely Sudoku)
 
 def findEmpty(arr): # function to find empty element in array
     EmpList=[]
-    for y in range(len(arr)):
-        for x in range(len(arr[y])):
-            if arr[y][x] == 0:
-                EmpList.append((y,x))
+    for row in range(len(arr)):
+        for col in range(len(arr[row])):
+            if arr[row][col] == 0:
+                EmpList.append((row,col))
     return EmpList
 
 def IsValid(arr, pos, val): # finction to check of the given value is valid
@@ -62,6 +63,28 @@ def solveSudoku(arr): # main algorithm to solve sudoku
                         return True
                     arr[I[0]][I[1]] = 0
             return False            
+        
+#####################################################_Check_For_Error_##############################################################
+        
+def check(arr):
+    empList = findEmpty(arr)
+    for row in range(9):
+        for col in range(9):
+            if (row, col) not in empList:
+                if IsValid(arr,(row, col), arr[row][col]):
+                    pass
+                else:
+                    return False
+    return True
+                    
+
+
+
+def problem(txt):
+    messagebox.showerror(title="Invalid Sudoku", message=txt)
+            
+
+
 
 
 #########################################################_GUI_Part_#################################################################
@@ -93,7 +116,7 @@ def createGrid():
     for i in range(9):
         row_entries = []
         for j in range(9):
-            entry = Entry(root, width=2, font=('Helvetica', 35), bg=ENTRY_BG, fg=ENTRY_FG)
+            entry = Entry(root, width=2, font=('Helvetica', 35), bg=ENTRY_BG, fg=ENTRY_FG, justify='center')
             entry.grid(row=i, column=j, padx=2, pady=2)
             row_entries.append(entry)
         entries.append(row_entries)
@@ -120,13 +143,24 @@ def clear():
     pass
 
 def solve(grid_entries):
-    initialSudoku = formSudoku(grid_entries)  
+    initialSudoku = formSudoku(grid_entries) 
     finalSudoku = copy.deepcopy(initialSudoku)
     solveSudoku(finalSudoku)
     printSudoku(finalSudoku)
-    #root.destroy()
+    root.destroy()
     displayResult(initialSudoku, finalSudoku)
 
+    """
+    if check(initialSudoku):
+        finalSudoku = copy.deepcopy(initialSudoku)
+        solveSudoku(finalSudoku)
+        printSudoku(finalSudoku)
+        root.destroy()
+        displayResult(initialSudoku, finalSudoku)
+    else:
+        problem("There seems to be some problem with your Sudoku")
+        del initialSudoku
+    """
 
 def main():
     global root
@@ -139,7 +173,7 @@ def main():
     grid_entries = createGrid()
     
     # Add a Solve button (you can later add functionality to solve the puzzle)
-    solveButton = Button(root, text="   Solve   ", command=lambda :solve(grid_entries), font=('Consol', 20))
+    solveButton = Button(master=root, text="   Solve   ", command=lambda :solve(grid_entries), font=('Consol', 20))
     solveButton.place(x=585,y=200)
     clearButton = Button(root, text=" Clear ", command=clear, font=('Consol', 20))
     clearButton.place(x=600, y=270)
