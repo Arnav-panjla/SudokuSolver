@@ -1,39 +1,28 @@
 from tkinter import *
 from tkinter import messagebox
-import copy
+import time
 
 
 ###############################_Constants_Defining_###################################
 GEOMETRY_ROOT = "750x600"
-GEOMETRY_OUTPUT = "700x600"
 BACKGROUND = "#393F42"
 ENTRY_BG = "#E2FCFF"
 ENTRY_FG = "blue"
 LABEL_BG = "#E2FCFF"
 LABEL_FG_IN = "blue"
 LABEL_FG_OUT = "green"
-
+TITLE_COLOR = "white"
 
 
 
 
 ########################################################_Sudoku_Solving_Algorithm_#############################################3
 
-def printSudoku(arr): # function to print array(or more precisely Sudoku)
-    for i in range(len(arr)):
-        if i%3 == 0 :
-            print("--------------------")
-        for j in range(len(arr[i])):
-            if j%3 == 0 :
-                print("|", end="")
-            print(arr[i][j], end=" ")
-        print()
-
 def findEmpty(arr): # function to find empty element in array
     EmpList=[]
     for row in range(len(arr)):
         for col in range(len(arr[row])):
-            if arr[row][col] == 0:
+            if arr[row][col] not in range(1,10):
                 EmpList.append((row,col))
     return EmpList
 
@@ -55,13 +44,17 @@ def solveSudoku(arr): # main algorithm to solve sudoku
     if EmpList == []:
         return True
     else:
-        for I in EmpList:
+        for I in EmpList: # I[0] is row I[1] is column
             for val in range(1,10):
                 if IsValid(arr,I,val):
                     arr[I[0]][I[1]] = val
+                    addVal(I[0],I[1],val)
+                    time.sleep(delay)
                     if solveSudoku(arr):
                         return True
                     arr[I[0]][I[1]] = 0
+                    addVal(I[0],I[1]," ")
+                    time.sleep(delay)
             return False            
         
 #####################################################_Check_For_Error_##############################################################
@@ -90,77 +83,48 @@ def problem(txt):
 #########################################################_GUI_Part_#################################################################
 
 def formSudoku(grid_entries):
-    sudoku = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-
+    sudoku = [[' ' for _ in range(9)] for _ in range(9)]
     for row in range(9):
         for col in range(9):
             grid_val = grid_entries[row][col].get()
             if  grid_val.isdigit():
                 sudoku[row][col] = int(grid_val)
-
     return sudoku
 
 def createGrid():
     entries = []
-
     for i in range(9):
         row_entries = []
         for j in range(9):
-            entry = Entry(root, width=2, font=('Helvetica', 35), bg=ENTRY_BG, fg=ENTRY_FG, justify='center')
-            entry.grid(row=i, column=j, padx=2, pady=2)
+            entry = Entry(root, width=2, font=('Helvetica', 32), bg=ENTRY_BG, fg=ENTRY_FG, justify='center')
+            entry.grid(row=i+2, column=j+2, padx=2, pady=2)
             row_entries.append(entry)
         entries.append(row_entries)
     return entries
 
 
-def displayResult(initialSudoku, finalSudoku): # function which displays output 
-    out_window = Tk()
-    out_window.geometry(GEOMETRY_OUTPUT)
-    out_window.title("Sudoku Result Display")
-    out_window.config(background=BACKGROUND)
+def addVal(row,col,val): # this function will add the value to a particular row and col
+    label = Label(root, text=str(val), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=LABEL_FG_OUT)
+    label.grid(row=row+2, column=col+2, padx=2, pady=2)
+    root.update()
 
+
+def clear(grid_entries):# function to clear all the entry boxes
     for i in range(9):
         for j in range(9):
-            if initialSudoku[i][j] == 0:
-                label = Label(out_window, text=str(finalSudoku[i][j]), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=LABEL_FG_OUT)
-                label.grid(row=i, column=j, padx=2, pady=2)
-            else:
-                label = Label(out_window, text=str(finalSudoku[i][j]), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=LABEL_FG_IN)
-                label.grid(row=i, column=j, padx=2, pady=2)
-
-
-def clear():
-    pass
+            grid_entries[i][j].delete(0, END)
 
 def solve(grid_entries):
-    initialSudoku = formSudoku(grid_entries) 
-    finalSudoku = copy.deepcopy(initialSudoku)
+    global delay
+    delay = 0.02
+    finalSudoku = formSudoku(grid_entries) 
     solveSudoku(finalSudoku)
-    printSudoku(finalSudoku)
-    root.destroy()
-    displayResult(initialSudoku, finalSudoku)
 
-    """
-    if check(initialSudoku):
-        finalSudoku = copy.deepcopy(initialSudoku)
-        solveSudoku(finalSudoku)
-        printSudoku(finalSudoku)
-        root.destroy()
-        displayResult(initialSudoku, finalSudoku)
-    else:
-        problem("There seems to be some problem with your Sudoku")
-        del initialSudoku
-    """
+def fastSolve(grid_entries):
+    global delay
+    delay = 0
+    finalSudoku = formSudoku(grid_entries) 
+    solveSudoku(finalSudoku)
 
 def main():
     global root
@@ -168,15 +132,19 @@ def main():
     root.title("Sudoku Solver")
     root.geometry(GEOMETRY_ROOT)
     root.config(background=BACKGROUND)
-
+    Label(root, text="SUDOKU SOLVER" ,font=('Helvetica', 30),background=BACKGROUND,foreground=TITLE_COLOR).grid(row=0,column=1, columnspan=10)
+    Label(root, text=" " ,font=('Helvetica', 20),background=BACKGROUND,foreground=TITLE_COLOR).grid(row=0,column=0)
     # Create a 9x9 grid of Entry widgets
     grid_entries = createGrid()
     
     # Add a Solve button (you can later add functionality to solve the puzzle)
     solveButton = Button(master=root, text="   Solve   ", command=lambda :solve(grid_entries), font=('Consol', 20))
-    solveButton.place(x=585,y=200)
-    clearButton = Button(root, text=" Clear ", command=clear, font=('Consol', 20))
-    clearButton.place(x=600, y=270)
+    solveButton.place(x=585,y=180)
+    fastSolveButton = Button(master=root, text="Fast Solve", command=lambda :fastSolve(grid_entries), font=('Consol', 20))
+    fastSolveButton.place(x=575, y=250)
+    clearButton = Button(root, text=" Clear ", command=lambda :clear(grid_entries), font=('Consol', 20))
+    clearButton.place(x=600, y=320)
+
 
     root.mainloop()
 
