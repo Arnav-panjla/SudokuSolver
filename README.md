@@ -9,14 +9,15 @@ This Python script provides a simple GUI-based Sudoku solver using the Tkinter l
 - [GUI Part](#gui-part)
 
 ## Constants
--GEOMETRY_ROOT = "750x600"
--BACKGROUND = "#393F42"
--ENTRY_BG = "#E2FCFF"
--ENTRY_FG = "blue"
--LABEL_BG = "#E2FCFF"
--LABEL_FG = "green"
--TITLE_COLOR = "white"
--SPEED = 0.02
+
+<br>GEOMETRY_ROOT = "750x600"
+<br>BACKGROUND = "#393F42"
+<br>ENTRY_BG = "#E2FCFF"
+<br>ENTRY_FG = "blue"
+<br>LABEL_BG = "#E2FCFF"
+<br>LABEL_FG = "green"
+<br>TITLE_COLOR = "white"
+<br>SPEED = 0.02
 
 <br>GEOMETRY_ROOT: Initial size of the GUI window.
 <br>BACKGROUND: Background color of the GUI.
