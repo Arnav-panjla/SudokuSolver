@@ -11,7 +11,7 @@ ENTRY_FG = "blue"
 LABEL_BG = "#E2FCFF"
 LABEL_FG = "green"
 TITLE_COLOR = "white"
-SPEED = 0.01
+SPEED = 0.02
 
 ########################################################_Sudoku_Solving_Algorithm_#############################################3
 
