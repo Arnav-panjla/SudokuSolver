@@ -11,7 +11,7 @@ ENTRY_FG = "blue"
 LABEL_BG = "#E2FCFF"
 LABEL_FG = "green"
 TITLE_COLOR = "white"
-SPEED = 22
+SPEED = 220
 ########################################################_Sudoku_Solving_Algorithm_#############################################3
 
 
@@ -39,7 +39,7 @@ def IsValidMove(arr, pos, val): # function to check of the given value is valid
     return True
 
 
-def solveSudoku(arr,delay,num=0): # main algorithm to solve sudoku
+def solveSudoku(arr, delay, num=0): # main algorithm to solve sudoku
     EmpList = findEmpty(arr)
     if EmpList == []:
         updateBoard(arr)
@@ -49,7 +49,7 @@ def solveSudoku(arr,delay,num=0): # main algorithm to solve sudoku
             for val in range(1,10):
                 if IsValidMove(arr,I,val):
                     arr[I[0]][I[1]] = val
-                    if solveSudoku(arr,delay,num):
+                    if solveSudoku(arr, delay, num):
                         return True
                     arr[I[0]][I[1]] = ' '
                     num+=1
@@ -69,7 +69,7 @@ def isValidSudoku(sud):
             val = sud[row][col]
             if  val in range(1,10):
                 sud[row][col] = ' '
-                if not IsValidMove(sud,(row, col), val):
+                if not IsValidMove(sud, (row, col), val):
                     txt = f"row:{row+1} col:{col+1} seems to be invalid. "
                     print(txt)
                     problem(txt)
@@ -99,7 +99,7 @@ def formSudoku(grid_entries):
     for row in range(9):
         for col in range(9):
             grid_val = grid_entries[row][col].get()
-            if  grid_val.isdigit():
+            if grid_val.isdigit():
                 sudoku[row][col] = int(grid_val)
             else:
                 sudoku[row][col] = grid_val
@@ -136,46 +136,50 @@ def moveFocus(row, col, row_inc, col_inc):
     grid_entries[new_row][new_col].focus_set()
 
 
-def addVal(row,col,val): # this function will add the value to a particular row and col
+def addVal(row, col, val): # this function will add the value to a particular row and col
     Label(root, text=str(val), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=LABEL_FG).grid(row=row+2, column=col+2, padx=2, pady=2)
     root.update()
+
 
 def updateBoard(board):
     for row in range(9):
         for col in range(9):
-            if (row,col) not in initialEntry:
-                addVal(row,col,board[row][col])
+            if (row, col) not in initialEntry:
+                addVal(row, col, board[row][col])
 
-def solve(grid_entries,delay):
+
+def solve(grid_entries, delay):
     # check if the given sudoku is valid or not
     finalSudoku = formSudoku(grid_entries) 
 
-    if isValidSudoku(finalSudoku)==True:
+    if isValidSudoku(finalSudoku):
         global initialEntry
-        initialEntry=[]
+        initialEntry = []
         # to convert filled entry to label
         for row in range(9):
             for col in range(9):
                 val = grid_entries[row][col].get()
                 if val.isdigit():
-                        initialEntry.append((row,col))
-                        Label(root, text=str(val), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=ENTRY_FG).grid(row=row+2, column=col+2, padx=2, pady=2)
+                    initialEntry.append((row, col))
+                    Label(root, text=str(val), width=2, height=1, font=('Helvetica', 30), background=LABEL_BG, fg=ENTRY_FG).grid(row=row+2, column=col+2, padx=2, pady=2)
         # sudoku solving function
-        solveSudoku(finalSudoku,delay)
+        solveSudoku(finalSudoku, delay)
     else:
         start()
+
 
 def start():
     global grid_entries
     #create a 9x9 grid of entry boxes
     grid_entries = createGrid()
 
-    solveButton = Button(master=root, text="   Solve   ", command=lambda :solve(grid_entries,SPEED), font=('Consol', 20))
-    solveButton.place(x=585,y=180)
-    fastSolveButton = Button(master=root, text="Fast Solve", command=lambda :solve(grid_entries,50), font=('Consol', 20))
+    solveButton = Button(master=root, text="   Solve   ", command=lambda: solve(grid_entries, SPEED), font=('Consol', 20))
+    solveButton.place(x=585, y=180)
+    fastSolveButton = Button(master=root, text="Fast Solve", command=lambda: solve(grid_entries, 50), font=('Consol', 20))
     fastSolveButton.place(x=575, y=250)
     clearButton = Button(root, text=" Clear ", command=start, font=('Consol', 20))
     clearButton.place(x=600, y=320)
+
 
 def main():
     global root
@@ -183,8 +187,8 @@ def main():
     root.title("Sudoku Solver")
     root.geometry(GEOMETRY_ROOT)
     root.config(background=BACKGROUND)
-    Label(root, text="SUKODU SOLVER" ,font=('Helvetica', 30),background=BACKGROUND,foreground=TITLE_COLOR).grid(row=0,column=1, columnspan=10)
-    Label(root, text=" " ,font=('Helvetica', 20),background=BACKGROUND,foreground=TITLE_COLOR).grid(row=0,column=0)
+    Label(root, text="SUDOKU SOLVER" ,font=('Helvetica', 30), background=BACKGROUND, foreground=TITLE_COLOR).grid(row=0, column=1, columnspan=10)
+    Label(root, text=" " ,font=('Helvetica', 20), background=BACKGROUND, foreground=TITLE_COLOR).grid(row=0, column=0)
 
     start()
 
