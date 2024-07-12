@@ -1,6 +1,6 @@
 # Sudoku Solver
 
-This Python script provides a simple GUI-based Sudoku solver using the Tkinter library. The solver uses a backtracking algorithm to fill in the missing numbers in a partially filled Sudoku grid.
+This Python script provides a simple GUI-based Sudoku solver using the backtracking algorithm and tkinter library. The solver uses a backtracking algorithm to fill in the missing numbers in a partially filled Sudoku grid.
 
 ## Table of Contents
 - [Constants](#constants)
