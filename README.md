@@ -27,7 +27,13 @@ This is a **Sudoku Solver** built using **Python** and **Tkinter**. It uses a **
 
 ## 📸 Screenshots
 
-To be added soon ....
+Here are some screenshots of the Sudoku Solver in action:
+<br>
+<img src="assets/sudoku_board.jpg" alt="Sudoku Board" width="300"/>
+<br>
+<img src="assets/solved_puzzle.jpg" alt="Solved Puzzle" width="300"/>
+<br>
+<br>
 
 ## 🤝 Acknowledgments
 
